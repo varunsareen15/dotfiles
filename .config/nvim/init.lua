@@ -43,6 +43,7 @@ vim.pack.add({
 	{ src = "https://github.com/lervag/vimtex" },
 	{ src = "https://github.com/norcalli/nvim-colorizer.lua" },
 	{ src = "https://github.com/max397574/startup.nvim" },
+	{ src = "https://github.com/kiyoon/jupynium.nvim" },
 })
 
 

@@ -12,6 +12,10 @@
       "rev": "6a3b0635bcd2490dbb1fa124217d41bf69ca0fa2",
       "src": "https://github.com/b0o/incline.nvim"
     },
+    "jupynium.nvim": {
+      "rev": "46381138437c82effb5b97c9c332818bc6c83154",
+      "src": "https://github.com/kiyoon/jupynium.nvim"
+    },
     "kanagawa.nvim": {
       "rev": "aef7f5cec0a40dbe7f3304214850c472e2264b10",
       "src": "https://github.com/rebelot/kanagawa.nvim"
