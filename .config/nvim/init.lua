@@ -70,7 +70,7 @@ vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' 
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
 vim.keymap.set("n", "<leader>e", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
 
-vim.lsp.enable({ "lua_ls", "clangd", "rust_analyzer", "pyright" })
+vim.lsp.enable({ "lua_ls", "clangd", "rust_analyzer", "pyright", "tsserver" })
 vim.lsp.config("lua_ls", {
 	settings = {
 		Lua = {
