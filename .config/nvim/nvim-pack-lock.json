@@ -1,8 +1,16 @@
 {
   "plugins": {
+    "avante.nvim": {
+      "rev": "ecc669a87deb2be95db49e53041c05a2d0980fd4",
+      "src": "https://github.com/yetone/avante.nvim"
+    },
     "bufferline.nvim": {
       "rev": "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3",
       "src": "https://github.com/akinsho/bufferline.nvim"
+    },
+    "claudecode.nvim": {
+      "rev": "aa9a5cebebdbfa449c1c5ff229ba5d98e66bafed",
+      "src": "https://github.com/coder/claudecode.nvim"
     },
     "github-nvim-theme": {
       "rev": "c106c9472154d6b2c74b74565616b877ae8ed31d",
@@ -23,6 +31,14 @@
     "mini.pick": {
       "rev": "b4351399db5043a781a32699a1bde60b747f711f",
       "src": "https://github.com/echasnovski/mini.pick"
+    },
+    "neo-tree.nvim": {
+      "rev": "9a1f0461c4cc62e64616bafe9425572ff6a5f245",
+      "src": "https://github.com/nvim-neo-tree/neo-tree.nvim"
+    },
+    "nui.nvim": {
+      "rev": "de740991c12411b663994b2860f1a4fd0937c130",
+      "src": "https://github.com/MunifTanjim/nui.nvim"
     },
     "nvim-colorizer.lua": {
       "rev": "a065833f35a3a7cc3ef137ac88b5381da2ba302e",
@@ -51,6 +67,10 @@
     "render-markdown.nvim": {
       "rev": "b2b135347e299ffbf7f4123fb7811899b0c9f4b8",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
+    },
+    "snacks.nvim": {
+      "rev": "fe7cfe9800a182274d0f868a74b7263b8c0c020b",
+      "src": "https://github.com/folke/snacks.nvim"
     },
     "startup.nvim": {
       "rev": "9ca3b9a55f2f2196ef90b39a52029b46fdde5226",

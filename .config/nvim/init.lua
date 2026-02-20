@@ -44,6 +44,10 @@ vim.pack.add({
 	{ src = "https://github.com/norcalli/nvim-colorizer.lua" },
 	{ src = "https://github.com/max397574/startup.nvim" },
 	{ src = "https://github.com/kiyoon/jupynium.nvim" },
+	{ src = "https://github.com/MunifTanjim/nui.nvim" },
+	{ src = "https://github.com/nvim-neo-tree/neo-tree.nvim" },
+	{ src = "https://github.com/folke/snacks.nvim" },
+	{ src = "https://github.com/coder/claudecode.nvim" },
 })
 
 
@@ -68,9 +72,9 @@ vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find f
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
 vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
-vim.keymap.set("n", "<leader>e", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
+vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", { desc = "Toggle file explorer" })
 
-vim.lsp.enable({ "lua_ls", "clangd", "rust_analyzer", "pyright", "tsserver" })
+vim.lsp.enable({ "lua_ls", "clangd", "rust_analyzer", "pyright", "ts_ls" })
 vim.lsp.config("lua_ls", {
 	settings = {
 		Lua = {
@@ -82,7 +86,7 @@ vim.lsp.config("lua_ls", {
 })
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
 
-require("startup").setup({theme = "dashboard"}) 
+require("startup").setup({ theme = "dashboard" })
 
 vim.cmd("colorscheme kanagawa-wave")
 vim.cmd(":hi statusline guibg=NONE")
@@ -106,50 +110,73 @@ vim.api.nvim_set_hl(0, "DiagnosticSignHint", { bg = "none" })
 local Term = { buf = nil, win = nil }
 
 local function ensure_term()
-  if Term.win and vim.api.nvim_win_is_valid(Term.win) then
-    vim.api.nvim_win_close(Term.win, true)
-    Term.win = nil
-    return
-  end
+	if Term.win and vim.api.nvim_win_is_valid(Term.win) then
+		vim.api.nvim_win_close(Term.win, true)
+		Term.win = nil
+		return
+	end
 
-  if not Term.buf or not vim.api.nvim_buf_is_valid(Term.buf) then
-    Term.buf = vim.api.nvim_create_buf(false, true)
-    vim.bo[Term.buf].bufhidden = "hide"
-  end
+	if not Term.buf or not vim.api.nvim_buf_is_valid(Term.buf) then
+		Term.buf = vim.api.nvim_create_buf(false, true)
+		vim.bo[Term.buf].bufhidden = "hide"
+	end
 
-  vim.cmd("botright split")
-  Term.win = vim.api.nvim_get_current_win()
+	vim.cmd("botright split")
+	Term.win = vim.api.nvim_get_current_win()
 
-  local h = math.max(10, math.min(math.floor(vim.o.lines * 0.30), 18))
-  vim.api.nvim_win_set_height(Term.win, h)
-  vim.api.nvim_win_set_buf(Term.win, Term.buf)
+	local h = math.max(10, math.min(math.floor(vim.o.lines * 0.30), 18))
+	vim.api.nvim_win_set_height(Term.win, h)
+	vim.api.nvim_win_set_buf(Term.win, Term.buf)
 
-  if vim.bo[Term.buf].buftype ~= "terminal" then
-    vim.fn.termopen(vim.o.shell)
-  end
+	if vim.bo[Term.buf].buftype ~= "terminal" then
+		vim.fn.termopen(vim.o.shell)
+	end
 
-  vim.wo[Term.win].number = false
-  vim.wo[Term.win].relativenumber = false
-  vim.cmd("startinsert")
+	vim.wo[Term.win].number = false
+	vim.wo[Term.win].relativenumber = false
+	vim.cmd("startinsert")
 end
 
 vim.keymap.set("n", "<leader>tt", ensure_term, { desc = "Toggle bottom terminal" })
 
 local function t_wincmd(dir)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", false)
-  vim.cmd("wincmd " .. dir)
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", false)
+	vim.cmd("wincmd " .. dir)
 end
 
 vim.keymap.set("t", "<C-j>", function() t_wincmd("j") end, { desc = "Terminal: window down" })
 vim.keymap.set("t", "<C-k>", function() t_wincmd("k") end, { desc = "Terminal: window up" })
 
 vim.keymap.set("t", "<Esc>", function()
-  local cur = vim.api.nvim_get_current_win()
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", false)
+	local cur = vim.api.nvim_get_current_win()
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", false)
 
-  if Term.win and vim.api.nvim_win_is_valid(Term.win) and cur == Term.win then
-    vim.api.nvim_win_close(Term.win, true)
-    Term.win = nil
-  end
+	if Term.win and vim.api.nvim_win_is_valid(Term.win) and cur == Term.win then
+		vim.api.nvim_win_close(Term.win, true)
+		Term.win = nil
+	end
 end, { desc = "Close toggle terminal" })
 
+require("claudecode").setup({
+  auto_start = true,
+})
+
+-- Claude Code keymaps
+vim.keymap.set("n", "<leader>ac", "<cmd>ClaudeCode<cr>", { desc = "Toggle Claude" })
+vim.keymap.set("n", "<leader>af", "<cmd>ClaudeCodeFocus<cr>", { desc = "Focus Claude" })
+vim.keymap.set("n", "<leader>ar", "<cmd>ClaudeCode --resume<cr>", { desc = "Resume Claude" })
+vim.keymap.set("n", "<leader>aC", "<cmd>ClaudeCode --continue<cr>", { desc = "Continue Claude" })
+vim.keymap.set("n", "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", { desc = "Select Claude model" })
+vim.keymap.set("n", "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", { desc = "Add current buffer" })
+vim.keymap.set("v", "<leader>as", "<cmd>ClaudeCodeSend<cr>", { desc = "Send to Claude" })
+vim.keymap.set("n", "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", { desc = "Accept diff" })
+vim.keymap.set("n", "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", { desc = "Deny diff" })
+
+-- Tree add for file explorers
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "NvimTree", "neo-tree", "oil", "minifiles", "netrw" },
+  callback = function(ev)
+    vim.keymap.set("n", "<leader>as", "<cmd>ClaudeCodeTreeAdd<cr>",
+      { buffer = ev.buf, desc = "Add file to Claude" })
+  end,
+})
